@@ -3,11 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TenZen - A Home for Healers - Waiting List</title>
-    <link
-      rel="icon"
-      href="bitmapWhite1.svg"
-    />
+    <title>TENZEN - A Home for Healers - Waiting List</title>
+    <link rel="icon" href="bitmapWhite1.svg" />
     <style>
       * {
         margin: 0;
@@ -77,7 +74,8 @@
 
       /* Tree edge glow effect with thicker edges */
       .tree-glow {
-        filter: brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px magenta) contrast(1.5);
+        filter: brightness(0) invert(1) drop-shadow(0 0 30px white)
+          drop-shadow(0 0 50px magenta) contrast(1.5);
         transform: scale(1.03);
       }
 
@@ -794,67 +792,75 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         console.log("DOM fully loaded");
-        
+
         // Get references to key elements
         const waitingListForm = document.getElementById("waitingListForm");
         const treeBackground = document.querySelector(".tree-background");
         const successMessage = document.getElementById("successMessage");
-        
+
         console.log("Form element:", waitingListForm);
         console.log("Tree background element:", treeBackground);
-        
+
         // Simple direct click handler for the glow effect with smooth transitions
-        document.getElementById("submitButton").addEventListener("click", function() {
-          const treeBackground = document.querySelector(".tree-background");
-          
-          // Define the normal and glowing states
-          const normalState = {
-            filter: "brightness(0) invert(1)",
-            transform: "scale(1)"
-          };
-          
-          const glowingState = {
-            filter: "brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px white) drop-shadow(0 0 70px magenta) drop-shadow(0 0 90px magenta) contrast(2) brightness(1.5)",
-            transform: "scale(1.05)"
-          };
-          
-          // Apply the glowing state
-          treeBackground.style.filter = glowingState.filter;
-          treeBackground.style.transform = glowingState.transform;
-          
-          // After 5 seconds, return to normal state
-          setTimeout(function() {
-            treeBackground.style.filter = normalState.filter;
-            treeBackground.style.transform = normalState.transform;
-          }, 5000);
-        });
+        document
+          .getElementById("submitButton")
+          .addEventListener("click", function () {
+            const treeBackground = document.querySelector(".tree-background");
+
+            // Define the normal and glowing states
+            const normalState = {
+              filter: "brightness(0) invert(1)",
+              transform: "scale(1)",
+            };
+
+            const glowingState = {
+              filter:
+                "brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px white) drop-shadow(0 0 70px magenta) drop-shadow(0 0 90px magenta) contrast(2) brightness(1.5)",
+              transform: "scale(1.05)",
+            };
+
+            // Apply the glowing state
+            treeBackground.style.filter = glowingState.filter;
+            treeBackground.style.transform = glowingState.transform;
+
+            // After 5 seconds, return to normal state
+            setTimeout(function () {
+              treeBackground.style.filter = normalState.filter;
+              treeBackground.style.transform = normalState.transform;
+            }, 5000);
+          });
 
         // Form submission handling
         waitingListForm.addEventListener("submit", function (e) {
           e.preventDefault();
           console.log("Form submitted!");
-          
+
           // Add tree glow effect
-          treeBackground.style.filter = "brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px white) drop-shadow(0 0 70px magenta) drop-shadow(0 0 90px magenta) contrast(2) brightness(1.5)";
+          treeBackground.style.filter =
+            "brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px white) drop-shadow(0 0 70px magenta) drop-shadow(0 0 90px magenta) contrast(2) brightness(1.5)";
           treeBackground.style.transform = "scale(1.05)";
-          console.log("Added tree-glow class:", treeBackground.classList.contains("tree-glow"));
-          
+          console.log(
+            "Added tree-glow class:",
+            treeBackground.classList.contains("tree-glow")
+          );
+
           // Show loading state
           const submitButton = this.querySelector('button[type="submit"]');
           const originalButtonText = submitButton.textContent;
-          submitButton.innerHTML = '<span class="spinner"></span> Submitting...';
+          submitButton.innerHTML =
+            '<span class="spinner"></span> Submitting...';
           submitButton.disabled = true;
-          
+
           // Simulate form submission (replace with actual API call)
           setTimeout(function () {
             // Hide form and show success message
             waitingListForm.style.display = "none";
             successMessage.style.display = "block";
-            
+
             console.log("Form submission complete!");
           }, 2000);
         });
-        
+
         // Add glowing dots
         const dotsContainer = document.getElementById("glowingDots");
         const dotPositions = [
