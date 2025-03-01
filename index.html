@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join Our Waiting List</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #a8e6ff 0%, #b5f9c7 100%);
+        position: relative;
+        color: #333;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Tree background */
+      .tree-background {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("drawingThin.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        opacity: 0.3;
+        filter: brightness(1) sepia(1) saturate(10) hue-rotate(30deg);
+        -webkit-filter: brightness(0) sepia(1) saturate(10) hue-rotate(30deg);
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* Remove the pseudo-elements */
+      .tree-background::before,
+      .tree-background::after {
+        content: none;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      /* Logo styling */
+      .logo {
+        max-width: 180px;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+      }
+
+      /* Logo pulsate and shine effect */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0.7));
+        }
+        50% {
+          transform: scale(1.05);
+          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9));
+        }
+        100% {
+          transform: scale(1);
+          filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0.7));
+        }
+      }
+
+      .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .content-left,
+      .content-right {
+        flex: 1;
+        padding: 20px;
+        max-width: 48%;
+      }
+
+      .content-divider {
+        width: 1px;
+        align-self: stretch;
+        margin: 40px 0;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(13, 110, 110, 0.3),
+          rgba(13, 110, 110, 0.3),
+          transparent
+        );
+      }
+
+      .elevator-pitch,
+      .info-section {
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
+        padding: 30px;
+        margin-bottom: 25px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+
+      .elevator-pitch h3,
+      .info-section h3 {
+        color: #0d6e6e;
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .elevator-pitch p,
+      .info-section p {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        color: #333;
+        text-align: center;
+      }
+
+      .info-section ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0 auto;
+        max-width: 90%;
+      }
+
+      .info-section li {
+        font-size: 1.05rem;
+        line-height: 1.5;
+        color: #333;
+        margin-bottom: 10px;
+        padding-left: 25px;
+        position: relative;
+      }
+
+      .info-section li:before {
+        content: "✓";
+        color: #0d6e6e;
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+      }
+
+      .quote-container {
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        height: auto;
+        margin-top: 25px;
+      }
+
+      .quote-text {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        color: #000;
+        font-style: italic;
+        margin-bottom: 15px;
+        position: relative;
+      }
+
+      .quote-text:before,
+      .quote-text:after {
+        content: '"';
+        font-size: 2rem;
+        color: rgba(13, 110, 110, 0.2);
+        position: absolute;
+      }
+
+      .quote-text:before {
+        top: -15px;
+        left: -10px;
+      }
+
+      .quote-text:after {
+        bottom: -30px;
+        right: -10px;
+      }
+
+      .author {
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+      }
+
+      .author-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .author-info {
+        text-align: left;
+      }
+
+      .author-name {
+        font-weight: bold;
+        font-size: 0.9rem;
+        margin-bottom: 2px;
+      }
+
+      .author-title {
+        color: #666;
+        font-size: 0.8rem;
+      }
+
+      .form-section {
+        flex: 1;
+      }
+
+      .form-card {
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
+        padding: 40px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+
+      .form-card h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #000;
+        font-size: 1.8rem;
+      }
+
+      .form-row {
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #000;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid rgba(13, 110, 110, 0.2);
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #333;
+        background-color: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        border-color: #0d6e6e;
+        box-shadow: 0 0 0 2px rgba(13, 110, 110, 0.2);
+        outline: none;
+      }
+
+      .two-col {
+        display: flex;
+        gap: 15px;
+      }
+
+      .two-col .form-group {
+        flex: 1;
+      }
+
+      button {
+        background-color: #0d6e6e;
+        color: white;
+        border: none;
+        padding: 14px 25px;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        box-shadow: 0 4px 8px rgba(13, 110, 110, 0.3);
+      }
+
+      button:hover {
+        background-color: #0a5c5c;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(13, 110, 110, 0.4);
+      }
+
+      .success-message {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        background-color: rgba(13, 110, 110, 0.1);
+        border-radius: 6px;
+        margin-top: 20px;
+        color: #000;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 60px;
+        padding: 20px;
+        color: #000;
+        font-size: 0.9rem;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+      }
+
+      .card {
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
+        padding: 40px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        color: #000;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        color: #000;
+        font-weight: 400;
+      }
+
+      /* Mobile sticky footer */
+      .mobile-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(135deg, #a8e6ff 0%, #b5f9c7 100%);
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        text-align: center;
+        z-index: 100;
+        display: none; /* Hidden by default, shown via JS */
+        backdrop-filter: blur(5px);
+        border-top: 1px solid rgba(13, 110, 110, 0.2);
+      }
+
+      .mobile-footer-btn {
+        background-color: #0d6e6e;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .mobile-footer-btn:hover,
+      .mobile-footer-btn:active {
+        background-color: #0a5a5a;
+      }
+
+      /* Remove the old button styles */
+      .scroll-to-form-btn {
+        display: none;
+      }
+
+      @media (max-width: 992px) {
+        .content {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .content-left,
+        .content-right {
+          max-width: 100%;
+          width: 100%;
+        }
+
+        .content-divider {
+          width: 80%;
+          height: 1px;
+          margin: 20px 0;
+          background: linear-gradient(
+            to right,
+            transparent,
+            rgba(13, 110, 110, 0.3),
+            rgba(13, 110, 110, 0.3),
+            transparent
+          );
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        .subtitle {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tree-background"></div>
+    <div class="container">
+      <header>
+        <img src="bitmap.svg" alt="TenZen Logo" class="logo" />
+        <h1>TenZen - A Home for Healers</h1>
+        <p class="subtitle">Join our exclusive Waiting List now!</p>
+      </header>
+
+      <div class="content">
+        <div class="content-left">
+          <div class="elevator-pitch">
+            <h3>What is TenZen?</h3>
+            <p>
+              TenZen is a revolutionary platform connecting wellness
+              practitioners with those seeking holistic health solutions. We
+              provide a seamless experience for healers to showcase their
+              expertise, manage appointments, and grow their practice while
+              helping clients discover and access the perfect wellness services
+              for their needs.
+            </p>
+          </div>
+
+          <div class="info-section">
+            <h3>Who is it for?</h3>
+            <ul>
+              <li>
+                Wellness practitioners looking to grow their client base and
+                manage their practice efficiently
+              </li>
+              <li>
+                Holistic healers seeking a professional online presence without
+                technical hassle
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-section">
+            <h3>Specialties we are after</h3>
+            <ul>
+              <li>Pilates, Physical Therapy, Tai Chi</li>
+              <li>Specialized Massage, Breath techniques</li>
+              <li>And many other holistic wellness practices</li>
+            </ul>
+          </div>
+
+          <div class="info-section">
+            <h3>What are the benefits?</h3>
+            <ul>
+              <li>Streamlined booking and appointment management system</li>
+              <li>
+                Increased visibility for practitioners through our targeted
+                marketing
+              </li>
+              <li>Secure payment processing and client management tools</li>
+              <li>
+                Community features to connect with other wellness professionals
+              </li>
+              <li>
+                Personalized recommendations for clients based on their health
+                goals
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="content-divider"></div>
+
+        <div class="content-right">
+          <div class="form-card">
+            <h2>Secure Your Spot</h2>
+            <form id="waitingListForm">
+              <div class="two-col">
+                <div class="form-group">
+                  <label for="firstName">First Name*</label>
+                  <input type="text" id="firstName" name="firstName" required />
+                </div>
+                <div class="form-group">
+                  <label for="lastName">Last Name*</label>
+                  <input type="text" id="lastName" name="lastName" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email Address*</label>
+                <input type="email" id="email" name="email" required />
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone Number (Optional)</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="Phone number"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="location">Location*</label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  placeholder="City, Country"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="expertise">Area of Expertise*</label>
+                <input
+                  type="text"
+                  id="expertise"
+                  name="expertise"
+                  placeholder="Pilates, Massage, Yoga, Breath therapy"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="businessNeeds">Business Needs (Optional)</label>
+                <textarea
+                  id="businessNeeds"
+                  name="businessNeeds"
+                  placeholder="Tell us about your business needs and how TenZen can help you grow, any features you'd like to see, or any other information you'd like to share"
+                  rows="4"
+                ></textarea>
+              </div>
+
+              <button type="submit">Join Waiting List</button>
+            </form>
+            <div class="success-message" id="successMessage">
+              <h3>Thank you for joining our waiting list!</h3>
+              <p>We'll be in touch soon with exclusive updates.</p>
+            </div>
+          </div>
+
+          <div class="quote-container">
+            <div class="quote-text">
+              "The natural healing force within each of us is the greatest force
+              in getting well."
+            </div>
+            <div class="author">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Hippocrates.jpg/330px-Hippocrates.jpg"
+                alt="Hippocrates"
+                class="author-avatar"
+              />
+              <div class="author-info">
+                <p class="author-name">Hippocrates</p>
+                <p class="author-title">Father of Medicine</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>&copy; 2025 TenZen. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Replace the button with a footer div -->
+    <div class="mobile-footer" id="mobileFooter">
+      <button class="mobile-footer-btn" id="scrollToFormBtn">
+        Go To Application
+      </button>
+    </div>
+
+    <script>
+      // Form validation functions
+      function validateEmail(email) {
+        // RFC 5322 compliant email regex
+        const emailRegex =
+          /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegex.test(email);
+      }
+
+      // Form submission handling
+      document
+        .getElementById("waitingListForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Get form values
+          const firstName = document.getElementById("firstName").value.trim();
+          const lastName = document.getElementById("lastName").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const phoneNumber = document.getElementById("phone").value.trim();
+          const location = document.getElementById("location").value.trim();
+          const expertise = document.getElementById("expertise").value.trim();
+          const businessNeeds = document
+            .getElementById("businessNeeds")
+            .value.trim();
+
+          // Validate email
+          if (!validateEmail(email)) {
+            alert("Please enter a valid email address.");
+            document.getElementById("email").focus();
+            return;
+          }
+
+          // Show loading state
+          const submitButton = this.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.innerHTML =
+            '<span class="spinner"></span> Submitting...';
+          submitButton.disabled = true;
+
+          // Create a FormData object - this works better with Google Apps Script
+          const formData = new FormData();
+          formData.append("firstName", firstName);
+          formData.append("lastName", lastName);
+          formData.append("email", email);
+          formData.append("phone", phoneNumber);
+          formData.append("location", location);
+          formData.append("expertise", expertise);
+          formData.append("businessNeeds", businessNeeds);
+          formData.append("timestamp", new Date().toISOString());
+
+          console.log("Submitting form data...");
+
+          // Google Apps Script Web App URL
+          const scriptURL =
+            "https://script.google.com/macros/s/AKfycbxmz7GD9I9d0qgfL62zhNNO7aDGAulFqGORm2ypE_Sj4EfcYeN8GljzMHtATpUUhp9d/exec";
+
+          // Using the fetch API with FormData
+          fetch(scriptURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData,
+          })
+            .then((response) => {
+              console.log("Form submitted successfully");
+              document.getElementById("waitingListForm").style.display = "none";
+              document.getElementById("successMessage").style.display = "block";
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert(
+                "There was an error submitting your form. Please try again."
+              );
+            })
+            .finally(() => {
+              // Reset button state
+              submitButton.innerHTML = originalButtonText;
+              submitButton.disabled = false;
+            });
+        });
+
+      // Real-time validation for better user experience
+      document.getElementById("email").addEventListener("blur", function () {
+        const email = this.value.trim();
+        if (email && !validateEmail(email)) {
+          this.setCustomValidity("Please enter a valid email address");
+          this.reportValidity();
+        } else {
+          this.setCustomValidity("");
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Form submission handling
+        const form = document.getElementById("waitingListForm");
+        const successMessage = document.getElementById("successMessage");
+        const scrollToFormBtn = document.getElementById("scrollToFormBtn");
+        const formCard = document.querySelector(".form-card");
+        const mobileFooter = document.getElementById("mobileFooter");
+
+        // Function to check if element is in viewport
+        function isInViewport(element) {
+          const rect = element.getBoundingClientRect();
+          // Consider element in viewport if at least 30% of it is visible
+          return (
+            rect.top <
+              (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.bottom > 0 &&
+            rect.left <
+              (window.innerWidth || document.documentElement.clientWidth) &&
+            rect.right > 0
+          );
+        }
+
+        // Function to toggle footer visibility based on form visibility and screen size
+        function toggleFooterVisibility() {
+          // Only show footer on mobile devices
+          if (window.innerWidth <= 992) {
+            if (isInViewport(formCard)) {
+              mobileFooter.style.display = "none";
+            } else {
+              mobileFooter.style.display = "block";
+            }
+          } else {
+            mobileFooter.style.display = "none";
+          }
+        }
+
+        // Scroll to form when button is clicked
+        scrollToFormBtn.addEventListener("click", function () {
+          formCard.scrollIntoView({ behavior: "smooth" });
+        });
+
+        // Check footer visibility on scroll and resize
+        window.addEventListener("scroll", toggleFooterVisibility);
+        window.addEventListener("resize", toggleFooterVisibility);
+
+        // Initial check for footer visibility
+        toggleFooterVisibility();
+      });
+    </script>
+  </body>
+</html>
