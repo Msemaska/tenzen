@@ -21,36 +21,121 @@
         margin: 0;
         padding: 0;
         min-height: 100vh;
-        background: linear-gradient(135deg, #a8e6ff 0%, #b5f9c7 100%);
+        background: linear-gradient(
+          135deg,
+          #051937 0%,
+          #004d7a 50%,
+          #008793 100%
+        );
         position: relative;
-        color: #333;
+        color: #e0e0e0;
         line-height: 1.6;
         overflow-x: hidden;
       }
 
-      /* Tree background */
-      .tree-background {
+      /* Background pattern */
+      body::before {
+        content: "";
         position: fixed;
-
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("drawingThin.svg");
-        background-repeat: no-repeat;
-        background-position: center;
+        background-image: radial-gradient(
+            circle at 25px 25px,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 0
+          ),
+          radial-gradient(
+            circle at 75px 75px,
+            rgba(255, 255, 255, 0.05) 2px,
+            transparent 0
+          );
+        background-size: 100px 100px;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.4;
+      }
+
+      /* Base tree with transition for smooth effect */
+      .tree-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("drawingThin1.svg");
         background-size: cover;
-        opacity: 0.3;
-        filter: brightness(1) sepia(1) saturate(10) hue-rotate(30deg);
-        -webkit-filter: brightness(0) sepia(1) saturate(10) hue-rotate(30deg);
+        background-position: center;
+        opacity: 1;
+        filter: brightness(0) invert(1);
+        transform: scale(1);
         z-index: 1;
+        pointer-events: none;
+        transition: filter 2s ease, transform 2s ease;
+      }
+
+      /* Tree edge glow effect with thicker edges */
+      .tree-glow {
+        filter: brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px magenta) contrast(1.5);
+        transform: scale(1.03);
+      }
+
+      /* Add glowing dots effect */
+      .glowing-dots {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
         pointer-events: none;
       }
 
-      /* Remove the pseudo-elements */
-      .tree-background::before,
-      .tree-background::after {
-        content: none;
+      .glowing-dot {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8),
+          0 0 20px 5px rgba(255, 255, 255, 0.5);
+        animation: pulse-glow 3s infinite alternate;
+      }
+
+      .glowing-dot-small {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.8),
+          0 0 10px 2px rgba(255, 255, 255, 0.5);
+        animation: pulse-glow-small 4s infinite alternate;
+      }
+
+      @keyframes pulse-glow {
+        0% {
+          opacity: 0.3;
+          box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.5);
+        }
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.8),
+            0 0 30px 8px rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      @keyframes pulse-glow-small {
+        0% {
+          opacity: 0.2;
+          box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.4);
+        }
+        100% {
+          opacity: 0.8;
+          box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.7),
+            0 0 15px 4px rgba(255, 255, 255, 0.4);
+        }
       }
 
       .container {
@@ -69,24 +154,7 @@
       /* Logo styling */
       .logo {
         max-width: 180px;
-        margin-bottom: 20px;
-        animation: pulse 2s infinite;
-      }
-
-      /* Logo pulsate and shine effect */
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-          filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0.7));
-        }
-        50% {
-          transform: scale(1.05);
-          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9));
-        }
-        100% {
-          transform: scale(1);
-          filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0.7));
-        }
+        margin-bottom: 5px;
       }
 
       .content {
@@ -112,17 +180,17 @@
         background: linear-gradient(
           to bottom,
           transparent,
-          rgba(13, 110, 110, 0.3),
-          rgba(13, 110, 110, 0.3),
+          rgba(0, 77, 122, 0.5),
+          rgba(0, 77, 122, 0.5),
           transparent
         );
       }
 
       .elevator-pitch,
       .info-section {
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.9);
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 77, 122, 0.25);
         padding: 30px;
         margin-bottom: 25px;
         backdrop-filter: blur(5px);
@@ -131,10 +199,13 @@
 
       .elevator-pitch h3,
       .info-section h3 {
-        color: #0d6e6e;
+        color: #004d7a;
         font-size: 1.4rem;
         margin-bottom: 15px;
         text-align: center;
+        font-weight: 300;
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
 
       .elevator-pitch p,
@@ -143,6 +214,8 @@
         line-height: 1.5;
         color: #333;
         text-align: center;
+        font-weight: 300;
+        letter-spacing: 0.5px;
       }
 
       .info-section ul {
@@ -159,20 +232,22 @@
         margin-bottom: 10px;
         padding-left: 25px;
         position: relative;
+        font-weight: 300;
+        letter-spacing: 0.5px;
       }
 
       .info-section li:before {
         content: "✓";
-        color: #0d6e6e;
+        color: #004d7a;
         position: absolute;
         left: 0;
         font-weight: bold;
       }
 
       .quote-container {
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.9);
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 77, 122, 0.25);
         padding: 25px;
         display: flex;
         flex-direction: column;
@@ -191,13 +266,15 @@
         font-style: italic;
         margin-bottom: 15px;
         position: relative;
+        font-weight: 300;
+        letter-spacing: 0.5px;
       }
 
       .quote-text:before,
       .quote-text:after {
         content: '"';
         font-size: 2rem;
-        color: rgba(13, 110, 110, 0.2);
+        color: rgba(0, 77, 122, 0.2);
         position: absolute;
       }
 
@@ -229,14 +306,17 @@
       }
 
       .author-name {
-        font-weight: bold;
+        font-weight: 500;
         font-size: 0.9rem;
         margin-bottom: 2px;
+        letter-spacing: 0.5px;
       }
 
       .author-title {
         color: #666;
         font-size: 0.8rem;
+        font-weight: 300;
+        letter-spacing: 0.5px;
       }
 
       .form-section {
@@ -244,20 +324,50 @@
       }
 
       .form-card {
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.9);
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
-        padding: 40px;
-        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 10px 30px rgba(0, 77, 122, 0.25);
+        padding: 30px;
+        margin-bottom: 25px;
         backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        position: relative;
+      }
+
+      /* Create oscillating border effect with blue to gold color phasing */
+      .form-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 12px;
+        border: 3px solid #004d7a; /* Start with blue */
+        animation: borderColorPhase 3s ease-in-out infinite alternate;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      @keyframes borderColorPhase {
+        0% {
+          border-color: #004d7a; /* Deep blue */
+        }
+        50% {
+          border-color: #0077be; /* Medium blue */
+        }
+        100% {
+          border-color: #ffd700; /* Gold */
+        }
       }
 
       .form-card h2 {
-        margin-top: 0;
+        color: #004d7a;
+        font-size: 1.6rem;
         margin-bottom: 20px;
-        color: #000;
-        font-size: 1.8rem;
+        text-align: center;
+        font-weight: 300;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
       }
 
       .form-row {
@@ -271,26 +381,29 @@
       .form-group label {
         display: block;
         margin-bottom: 8px;
-        font-weight: 500;
+        font-weight: 400;
         color: #000;
+        letter-spacing: 0.5px;
       }
 
       .form-group input,
       .form-group textarea {
         width: 100%;
         padding: 12px 15px;
-        border: 1px solid rgba(13, 110, 110, 0.2);
+        border: 1px solid rgba(0, 77, 122, 0.2);
         border-radius: 8px;
         font-size: 1rem;
-        color: #333;
+        color: #000;
         background-color: rgba(255, 255, 255, 0.8);
         transition: all 0.3s ease;
+        font-weight: 300;
+        letter-spacing: 0.5px;
       }
 
       .form-group input:focus,
       .form-group textarea:focus {
-        border-color: #0d6e6e;
-        box-shadow: 0 0 0 2px rgba(13, 110, 110, 0.2);
+        border-color: #004d7a;
+        box-shadow: 0 0 0 2px rgba(0, 77, 122, 0.2);
         outline: none;
       }
 
@@ -304,33 +417,46 @@
       }
 
       button {
-        background-color: #0d6e6e;
+        background-color: #004d7a;
         color: white;
         border: none;
         padding: 14px 25px;
         border-radius: 6px;
         font-size: 1rem;
-        font-weight: 600;
+        font-weight: 500;
         cursor: pointer;
         transition: all 0.3s ease;
         width: 100%;
-        box-shadow: 0 4px 8px rgba(13, 110, 110, 0.3);
+        box-shadow: 0 4px 8px rgba(0, 77, 122, 0.3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
 
       button:hover {
-        background-color: #0a5c5c;
+        background-color: #003a5c;
         transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(13, 110, 110, 0.4);
+        box-shadow: 0 6px 12px rgba(0, 77, 122, 0.4);
       }
 
       .success-message {
         display: none;
         text-align: center;
         padding: 20px;
-        background-color: rgba(13, 110, 110, 0.1);
+        background-color: rgba(0, 77, 122, 0.1);
         border-radius: 6px;
         margin-top: 20px;
         color: #000;
+      }
+
+      .success-message h3 {
+        font-weight: 300;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+
+      .success-message p {
+        font-weight: 300;
+        letter-spacing: 0.5px;
       }
 
       .spinner {
@@ -355,15 +481,17 @@
         text-align: center;
         margin-top: 60px;
         padding: 20px;
-        color: #000;
+        color: #e0e0e0;
         font-size: 0.9rem;
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+        font-weight: 300;
+        letter-spacing: 1px;
       }
 
       .card {
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.9);
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(13, 110, 110, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 77, 122, 0.25);
         padding: 40px;
         transition: transform 0.3s, box-shadow 0.3s;
         backdrop-filter: blur(5px);
@@ -373,15 +501,46 @@
       h1 {
         font-size: 2.5rem;
         margin-bottom: 10px;
-        color: #000;
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        color: white;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: linear-gradient(90deg, #ffffff, #e0e0e0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
       }
 
       .subtitle {
         font-size: 1.2rem;
         margin-bottom: 30px;
-        color: #000;
+        color: #e0e0e0;
         font-weight: 400;
+        letter-spacing: 1px;
+        position: relative;
+        display: inline-block;
+      }
+
+      .subtitle::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffffff, transparent);
       }
 
       /* Mobile sticky footer */
@@ -390,33 +549,32 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        background: linear-gradient(135deg, #a8e6ff 0%, #b5f9c7 100%);
-        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(90deg, #051937 0%, #004d7a 100%);
         padding: 15px;
         text-align: center;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
         z-index: 100;
-        display: none; /* Hidden by default, shown via JS */
-        backdrop-filter: blur(5px);
-        border-top: 1px solid rgba(13, 110, 110, 0.2);
+        display: none;
       }
 
       .mobile-footer-btn {
-        background-color: #0d6e6e;
+        background-color: #004d7a;
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 12px 0;
+        border-radius: 25px;
+        padding: 12px 25px;
         font-size: 1rem;
-        font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        width: 100%;
-        max-width: 300px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
       }
 
       .mobile-footer-btn:hover,
       .mobile-footer-btn:active {
-        background-color: #0a5a5a;
+        background-color: #003a5c;
+        transform: translateY(-2px);
       }
 
       /* Remove the old button styles */
@@ -433,18 +591,17 @@
         .content-left,
         .content-right {
           max-width: 100%;
-          width: 100%;
         }
 
         .content-divider {
-          width: 80%;
+          width: 100%;
           height: 1px;
           margin: 20px 0;
           background: linear-gradient(
             to right,
             transparent,
-            rgba(13, 110, 110, 0.3),
-            rgba(13, 110, 110, 0.3),
+            rgba(0, 77, 122, 0.5),
+            rgba(0, 77, 122, 0.5),
             transparent
           );
         }
@@ -457,15 +614,20 @@
           font-size: 1rem;
         }
       }
+
+      /* Tree edge glow effect */
     </style>
   </head>
   <body>
     <div class="tree-background"></div>
+    <div class="glowing-dots" id="glowingDots"></div>
     <div class="container">
       <header>
-        <img src="bitmap.svg" alt="TenZen Logo" class="logo" />
-        <h1>TenZen - A Home for Healers</h1>
-        <p class="subtitle">Join our exclusive Waiting List now!</p>
+        <div style="display: flex; flex-direction: column; align-items: center">
+          <img src="bitmapWhite1.svg" alt="TenZen Logo" class="logo" />
+          <h1>TenZen</h1>
+        </div>
+        <p class="subtitle">A sanctuary for healers and seekers</p>
       </header>
 
       <div class="content">
@@ -589,7 +751,7 @@
                 ></textarea>
               </div>
 
-              <button type="submit">Join Waiting List</button>
+              <button type="submit" id="submitButton">Join Waiting List</button>
             </form>
             <div class="success-message" id="successMessage">
               <h3>Thank you for joining our waiting list!</h3>
@@ -630,104 +792,150 @@
     </div>
 
     <script>
-      // Form validation functions
-      function validateEmail(email) {
-        // RFC 5322 compliant email regex
-        const emailRegex =
-          /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return emailRegex.test(email);
-      }
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM fully loaded");
+        
+        // Get references to key elements
+        const waitingListForm = document.getElementById("waitingListForm");
+        const treeBackground = document.querySelector(".tree-background");
+        const successMessage = document.getElementById("successMessage");
+        
+        console.log("Form element:", waitingListForm);
+        console.log("Tree background element:", treeBackground);
+        
+        // Simple direct click handler for the glow effect with smooth transitions
+        document.getElementById("submitButton").addEventListener("click", function() {
+          const treeBackground = document.querySelector(".tree-background");
+          
+          // Define the normal and glowing states
+          const normalState = {
+            filter: "brightness(0) invert(1)",
+            transform: "scale(1)"
+          };
+          
+          const glowingState = {
+            filter: "brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px white) drop-shadow(0 0 70px magenta) drop-shadow(0 0 90px magenta) contrast(2) brightness(1.5)",
+            transform: "scale(1.05)"
+          };
+          
+          // Apply the glowing state
+          treeBackground.style.filter = glowingState.filter;
+          treeBackground.style.transform = glowingState.transform;
+          
+          // After 5 seconds, return to normal state
+          setTimeout(function() {
+            treeBackground.style.filter = normalState.filter;
+            treeBackground.style.transform = normalState.transform;
+          }, 5000);
+        });
 
-      // Form submission handling
-      document
-        .getElementById("waitingListForm")
-        .addEventListener("submit", function (e) {
+        // Form submission handling
+        waitingListForm.addEventListener("submit", function (e) {
           e.preventDefault();
-
-          // Get form values
-          const firstName = document.getElementById("firstName").value.trim();
-          const lastName = document.getElementById("lastName").value.trim();
-          const email = document.getElementById("email").value.trim();
-          const phoneNumber = document.getElementById("phone").value.trim();
-          const location = document.getElementById("location").value.trim();
-          const expertise = document.getElementById("expertise").value.trim();
-          const businessNeeds = document
-            .getElementById("businessNeeds")
-            .value.trim();
-
-          // Validate email
-          if (!validateEmail(email)) {
-            alert("Please enter a valid email address.");
-            document.getElementById("email").focus();
-            return;
-          }
-
+          console.log("Form submitted!");
+          
+          // Add tree glow effect
+          treeBackground.style.filter = "brightness(0) invert(1) drop-shadow(0 0 30px white) drop-shadow(0 0 50px white) drop-shadow(0 0 70px magenta) drop-shadow(0 0 90px magenta) contrast(2) brightness(1.5)";
+          treeBackground.style.transform = "scale(1.05)";
+          console.log("Added tree-glow class:", treeBackground.classList.contains("tree-glow"));
+          
           // Show loading state
           const submitButton = this.querySelector('button[type="submit"]');
           const originalButtonText = submitButton.textContent;
-          submitButton.innerHTML =
-            '<span class="spinner"></span> Submitting...';
+          submitButton.innerHTML = '<span class="spinner"></span> Submitting...';
           submitButton.disabled = true;
+          
+          // Simulate form submission (replace with actual API call)
+          setTimeout(function () {
+            // Hide form and show success message
+            waitingListForm.style.display = "none";
+            successMessage.style.display = "block";
+            
+            console.log("Form submission complete!");
+          }, 2000);
+        });
+        
+        // Add glowing dots
+        const dotsContainer = document.getElementById("glowingDots");
+        const dotPositions = [
+          { top: "20%", left: "15%" },
+          { top: "25%", left: "30%" },
+          { top: "15%", left: "45%" },
+          { top: "30%", left: "60%" },
+          { top: "18%", left: "75%" },
+          { top: "40%", left: "20%" },
+          { top: "50%", left: "35%" },
+          { top: "45%", left: "55%" },
+          { top: "55%", left: "70%" },
+          { top: "60%", left: "25%" },
+          { top: "70%", left: "40%" },
+          { top: "65%", left: "60%" },
+          { top: "75%", left: "75%" },
+          { top: "80%", left: "30%" },
+          { top: "85%", left: "50%" },
+        ];
 
-          // Create a FormData object - this works better with Google Apps Script
-          const formData = new FormData();
-          formData.append("firstName", firstName);
-          formData.append("lastName", lastName);
-          formData.append("email", email);
-          formData.append("phone", phoneNumber);
-          formData.append("location", location);
-          formData.append("expertise", expertise);
-          formData.append("businessNeeds", businessNeeds);
-          formData.append("timestamp", new Date().toISOString());
+        // Small dot positions
+        const smallDotPositions = [
+          { top: "22%", left: "18%" },
+          { top: "17%", left: "25%" },
+          { top: "28%", left: "35%" },
+          { top: "12%", left: "40%" },
+          { top: "19%", left: "55%" },
+          { top: "26%", left: "65%" },
+          { top: "14%", left: "70%" },
+          { top: "32%", left: "80%" },
+          { top: "38%", left: "15%" },
+          { top: "45%", left: "25%" },
+          { top: "35%", left: "45%" },
+          { top: "42%", left: "65%" },
+          { top: "48%", left: "75%" },
+          { top: "55%", left: "15%" },
+          { top: "52%", left: "45%" },
+          { top: "58%", left: "60%" },
+          { top: "62%", left: "35%" },
+          { top: "68%", left: "50%" },
+          { top: "72%", left: "65%" },
+          { top: "65%", left: "80%" },
+          { top: "78%", left: "20%" },
+          { top: "82%", left: "40%" },
+          { top: "75%", left: "55%" },
+          { top: "88%", left: "65%" },
+          { top: "23%", left: "42%" },
+          { top: "37%", left: "58%" },
+          { top: "53%", left: "27%" },
+          { top: "67%", left: "72%" },
+          { top: "83%", left: "18%" },
+          { top: "77%", left: "38%" },
+        ];
 
-          console.log("Submitting form data...");
+        // Create dots with random delay for animation
+        dotPositions.forEach((position) => {
+          const dot = document.createElement("div");
+          dot.className = "glowing-dot";
+          dot.style.top = position.top;
+          dot.style.left = position.left;
 
-          // Google Apps Script Web App URL
-          const scriptURL =
-            "https://script.google.com/macros/s/AKfycbxmz7GD9I9d0qgfL62zhNNO7aDGAulFqGORm2ypE_Sj4EfcYeN8GljzMHtATpUUhp9d/exec";
+          // Random animation delay for more natural effect
+          const delay = Math.random() * 3;
+          dot.style.animationDelay = `${delay}s`;
 
-          // Using the fetch API with FormData
-          fetch(scriptURL, {
-            method: "POST",
-            mode: "no-cors",
-            body: formData,
-          })
-            .then((response) => {
-              console.log("Form submitted successfully");
-              document.getElementById("waitingListForm").style.display = "none";
-              document.getElementById("successMessage").style.display = "block";
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              alert(
-                "There was an error submitting your form. Please try again."
-              );
-            })
-            .finally(() => {
-              // Reset button state
-              submitButton.innerHTML = originalButtonText;
-              submitButton.disabled = false;
-            });
+          dotsContainer.appendChild(dot);
         });
 
-      // Real-time validation for better user experience
-      document.getElementById("email").addEventListener("blur", function () {
-        const email = this.value.trim();
-        if (email && !validateEmail(email)) {
-          this.setCustomValidity("Please enter a valid email address");
-          this.reportValidity();
-        } else {
-          this.setCustomValidity("");
-        }
-      });
+        // Create smaller dots
+        smallDotPositions.forEach((position) => {
+          const dot = document.createElement("div");
+          dot.className = "glowing-dot-small";
+          dot.style.top = position.top;
+          dot.style.left = position.left;
 
-      document.addEventListener("DOMContentLoaded", function () {
-        // Form submission handling
-        const form = document.getElementById("waitingListForm");
-        const successMessage = document.getElementById("successMessage");
-        const scrollToFormBtn = document.getElementById("scrollToFormBtn");
-        const formCard = document.querySelector(".form-card");
-        const mobileFooter = document.getElementById("mobileFooter");
+          // Random animation delay for more natural effect
+          const delay = Math.random() * 4;
+          dot.style.animationDelay = `${delay}s`;
+
+          dotsContainer.appendChild(dot);
+        });
 
         // Function to check if element is in viewport
         function isInViewport(element) {
@@ -747,7 +955,7 @@
         function toggleFooterVisibility() {
           // Only show footer on mobile devices
           if (window.innerWidth <= 992) {
-            if (isInViewport(formCard)) {
+            if (isInViewport(waitingListForm)) {
               mobileFooter.style.display = "none";
             } else {
               mobileFooter.style.display = "block";
@@ -759,7 +967,7 @@
 
         // Scroll to form when button is clicked
         scrollToFormBtn.addEventListener("click", function () {
-          formCard.scrollIntoView({ behavior: "smooth" });
+          waitingListForm.scrollIntoView({ behavior: "smooth" });
         });
 
         // Check footer visibility on scroll and resize
