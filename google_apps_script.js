@@ -8,43 +8,52 @@ function doGet(e) {
 
 // Set up the doPost function to handle POST requests from your form
 function doPost(e) {
+  // Log the content type for debugging
+  Logger.log("Content type: " + (e.postData ? e.postData.type : "No postData"));
+  Logger.log("Parameters: " + JSON.stringify(e.parameter));
+  
+  try {
+    // Get the data from the request
+    var data;
+    
+    // Check if this is JSON data
+    if (e.postData && e.postData.type === "application/json") {
+      // Parse JSON data
+      data = JSON.parse(e.postData.contents);
+      Logger.log("Received JSON data: " + JSON.stringify(data));
+    } else if (e.parameter && e.parameter.format === "json") {
+      // This is our special case for the form submission approach
+      data = e.parameter;
+      Logger.log("Received form data with JSON format: " + JSON.stringify(data));
+    } else {
+      // Regular form data
+      data = e.parameter;
+      Logger.log("Received regular form data: " + JSON.stringify(data));
+    }
+    
+    return processFormData(data);
+  } catch (error) {
+    // Log the error
+    Logger.log("Error in doPost: " + error.toString());
+    
+    // Return error response
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        result: "error",
+        message: "Error processing request: " + error.toString(),
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function processFormData(data) {
   try {
     // Get the spreadsheet and the active sheet
-    var ss = SpreadsheetApp.openById("YOUR_SPREADSHEET_ID_HERE"); // Replace with your actual spreadsheet ID
+    var ss = SpreadsheetApp.openById("1MMr0QE89cqC8JVpjCXoyzitpdncC4JxnuCQbPMGBqcU"); // Your spreadsheet ID
     var sheet = ss.getSheetByName("Waitlist") || ss.getActiveSheet(); // Use "Waitlist" sheet or the active sheet
-
-    // Get the data from the form submission
-    var data;
-
-    // Check if the data is in the POST body
-    if (e.postData && e.postData.contents) {
-      try {
-        // Try to parse as JSON first
-        data = JSON.parse(e.postData.contents);
-      } catch (error) {
-        // If not JSON, try to handle as form data
-        data = {};
-        var formData = e.postData.contents.split("&");
-        for (var i = 0; i < formData.length; i++) {
-          var keyValue = formData[i].split("=");
-          data[decodeURIComponent(keyValue[0])] = decodeURIComponent(
-            keyValue[1] || ""
-          );
-        }
-      }
-    } else if (e.parameter) {
-      // If data is in URL parameters
-      data = e.parameter;
-    } else {
-      // Handle FormData object
-      data = {};
-      for (var key in e.parameters) {
-        data[key] = e.parameters[key];
-      }
-    }
-
-    // Log the received data for debugging
-    Logger.log("Received data: " + JSON.stringify(data));
+    
+    // Log the data for debugging
+    Logger.log("Processing data: " + JSON.stringify(data));
 
     // Sanitize and validate the business needs field
     if (data.businessNeeds) {
@@ -85,16 +94,29 @@ function doPost(e) {
       data.businessNeeds || ""
     ]);
 
-    // Return success response
-    return ContentService.createTextOutput(
-      JSON.stringify({
-        result: "success",
-        message: "Data added to spreadsheet",
-      })
-    ).setMimeType(ContentService.MimeType.JSON);
+    // Create a success response
+    var htmlOutput = HtmlService.createHtmlOutput(
+      "<html><body><h1>Success!</h1><p>Your information has been submitted successfully.</p>" +
+      "<p>You can close this window now.</p>" +
+      "<script>window.parent.postMessage('success', '*'); setTimeout(function() { window.close(); }, 500);</script>" +
+      "</body></html>"
+    );
+    
+    // For API calls, return JSON
+    if (data.format === "json" || data.format === undefined) {
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          result: "success",
+          message: "Data added to spreadsheet",
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    } else {
+      // For form submissions, return HTML
+      return htmlOutput;
+    }
   } catch (error) {
     // Log the error
-    Logger.log("Error: " + error.toString());
+    Logger.log("Error in processFormData: " + error.toString());
 
     // Return error response
     return ContentService.createTextOutput(

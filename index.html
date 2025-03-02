@@ -852,14 +852,140 @@
             '<span class="spinner"></span> Submitting...';
           submitButton.disabled = true;
 
-          // Simulate form submission (replace with actual API call)
-          setTimeout(function () {
+          // Collect form data
+          const formData = new FormData(waitingListForm);
+          const formDataObj = {};
+
+          // Convert FormData to a regular object
+          for (let [key, value] of formData.entries()) {
+            formDataObj[key] = value;
+          }
+
+          // Add timestamp
+          formDataObj.timestamp = new Date().toISOString();
+
+          console.log("Form data to be submitted:", formDataObj);
+
+          // Google Apps Script Web App URL
+          const scriptURL =
+            "https://script.google.com/macros/s/AKfycby0wjSiDpg-OOOQKcDOhVNedtOOSoLv2GveRnugQFPf4GAVcBXjtPQDVlV91Nxp2LlA/exec";
+
+          // Create an invisible iframe to handle the form submission
+          const invisibleIframe = document.createElement("iframe");
+          invisibleIframe.name = "hidden_iframe";
+          invisibleIframe.id = "hidden_iframe";
+          invisibleIframe.style.display = "none";
+          document.body.appendChild(invisibleIframe);
+
+          // Create a hidden form that will submit to the Google Apps Script
+          const hiddenForm = document.createElement("form");
+          hiddenForm.method = "POST";
+          hiddenForm.action = scriptURL;
+          hiddenForm.target = "hidden_iframe"; // Target the invisible iframe
+
+          // Add form data as hidden inputs
+          for (const key in formDataObj) {
+            if (formDataObj.hasOwnProperty(key)) {
+              const hiddenField = document.createElement("input");
+              hiddenField.type = "hidden";
+              hiddenField.name = key;
+              hiddenField.value = formDataObj[key];
+              hiddenForm.appendChild(hiddenField);
+            }
+          }
+
+          // Add a special field to indicate this is JSON data
+          const formatField = document.createElement("input");
+          formatField.type = "hidden";
+          formatField.name = "format";
+          formatField.value = "json";
+          hiddenForm.appendChild(formatField);
+
+          // Add the form to the page
+          document.body.appendChild(hiddenForm);
+
+          console.log("Submitting form using hidden iframe approach");
+
+          // Set up a listener for the iframe load event
+          invisibleIframe.onload = function () {
+            console.log("Iframe loaded - form submission complete");
+
             // Hide form and show success message
             waitingListForm.style.display = "none";
             successMessage.style.display = "block";
 
-            console.log("Form submission complete!");
-          }, 2000);
+            // Clean up - remove the form and iframe after a delay
+            setTimeout(() => {
+              if (document.body.contains(hiddenForm)) {
+                document.body.removeChild(hiddenForm);
+              }
+              if (document.body.contains(invisibleIframe)) {
+                document.body.removeChild(invisibleIframe);
+              }
+            }, 1000);
+          };
+
+          try {
+            // Submit the form
+            hiddenForm.submit();
+            console.log("Form submitted successfully");
+
+            // Set a timeout to show success in case iframe onload doesn't fire
+            setTimeout(() => {
+              if (waitingListForm.style.display !== "none") {
+                console.log("Timeout reached - assuming form submission complete");
+                waitingListForm.style.display = "none";
+                successMessage.style.display = "block";
+              }
+            }, 3000);
+
+          } catch (error) {
+            console.error("Error submitting form:", error);
+            console.error("Error details:", error.message);
+
+            // Try the fetch approach as a fallback
+            console.log("Trying fetch approach as fallback");
+
+            fetch(scriptURL, {
+              method: "POST",
+              body: JSON.stringify(formDataObj),
+              headers: {
+                "Content-Type": "application/json",
+              },
+              mode: "no-cors", // This helps with CORS issues
+            })
+              .then((response) => {
+                console.log("Response received:", response);
+                // With no-cors mode, we can't read the response
+                // So we just assume success if we get here
+                return { result: "success", message: "Form submitted" };
+              })
+              .then((data) => {
+                console.log("Form submission successful:", data);
+                // Hide form and show success message
+                waitingListForm.style.display = "none";
+                successMessage.style.display = "block";
+              })
+              .catch((error) => {
+                console.error("Error submitting form (fetch fallback):", error);
+                console.error("Error details:", error.message);
+                console.error("Error stack:", error.stack);
+                // Reset button state
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+                // Show an error message to the user
+                alert(
+                  "There was an error submitting your form. Please try again. Error: " +
+                    error.message
+                );
+              });
+          } finally {
+            // Reset tree effect after 5 seconds regardless of submission result
+            setTimeout(function () {
+              treeBackground.style.filter = "brightness(0) invert(1)";
+              treeBackground.style.transform = "scale(1)";
+            }, 5000);
+          }
         });
 
         // Add glowing dots
